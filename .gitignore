@@ -1,0 +1,12 @@
+# Ignore compiled classes
+target/
+bin/
+*.class
+
+# Ignore Database Secrets
+src/main/resources/db.properties
+
+# Ignore Eclipse metadata
+.settings/
+.project
+.classpath
