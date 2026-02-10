@@ -1,6 +1,8 @@
 package com.pack.RevHire.view;
 import com.pack.RevHire.model.User;
 import com.pack.RevHire.service.UserService;
+
+import java.io.Console;
 import java.util.Scanner;
 
 public class view {
@@ -46,6 +48,7 @@ public class view {
     /**
      * Handles the Login Flow
      */
+   
     public void displayLoginMenu() 
     {
         System.out.println("\n--- User Login ---");
@@ -53,9 +56,21 @@ public class view {
         System.out.print("Email: ");
         String email = scanner.nextLine();
         
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
+//        System.out.print("Password: ");
+//        String password = scanner.nextLine();
+        String password = ""; // 1. Initialize outside the IF block
+        Console cons = System.console();
+        
+        if(cons!= null) {
+        	char[] passwordChars = cons.readPassword("Password: ");
+        	password = new String(passwordChars);
+            java.util.Arrays.fill(passwordChars, ' ');
+        }
+        else {
+            // 2. Fallback for Eclipse/IDE Console
+            System.out.print("Password: ");
+            password = scanner.nextLine();
+        }
         User loggedInUser = userService.login(email, password);
 
         if (loggedInUser != null) {

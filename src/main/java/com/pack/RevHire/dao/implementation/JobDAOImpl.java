@@ -84,11 +84,10 @@ public class JobDAOImpl implements JobDAO {
         return jobs;
     }
 
-    @Override
+   @Override
 	public Job getJobById(int jobId) {
-	    // We must add the JOIN here as well to get the company_name
 	    String sql = "SELECT j.*, e.company_name FROM jobs j " +
-	                 "JOIN employer_profile e ON j.employer_id = e.user_id " +
+	                 "LEFT JOIN employer_profile e ON j.employer_id = e.user_id " +
 	                 "WHERE j.job_id = ?";
 	    
 	    try (Connection conn = DBConnection.getConnection();
@@ -99,6 +98,10 @@ public class JobDAOImpl implements JobDAO {
 	        if (rs.next()) {
 	            Job j = new Job();
 	            j.setJobId(rs.getInt("job_id"));
+	            
+	            // ADD THIS LINE - This is why the Employer flow is failing!
+	            j.setEmployerId(rs.getInt("employer_id")); 
+	            
 	            j.setTitle(rs.getString("title"));
 	            j.setLocation(rs.getString("location"));
 	            j.setJobType(rs.getString("job_type"));
@@ -106,8 +109,7 @@ public class JobDAOImpl implements JobDAO {
 	            j.setSalaryMax(rs.getDouble("salary_max"));
 	            j.setDeadline(rs.getDate("deadline"));
 	            j.setDescription(rs.getString("description"));
-	            
-	            // MAP THE COMPANY NAME HERE TOO
+	            j.setStatus(rs.getString("status")); 
 	            j.setCompanyName(rs.getString("company_name"));
 	            
 	            return j;

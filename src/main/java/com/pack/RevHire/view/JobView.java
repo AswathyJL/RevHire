@@ -180,6 +180,8 @@ public class JobView {
 		    }
 		    return selectedSkillIds;
 		}
+		
+//		manage job postings
 	   
 	   public void manageJobPostings(User user) {
 		    while (true) {
@@ -222,6 +224,7 @@ public class JobView {
 
 		private void viewJobDetailsFlow(int jobId, int employerId) {
 		    Job job = jobService.getJobById(jobId);
+		    System.out.println(job.getEmployerId());
 		    
 		    if (job == null || job.getEmployerId() != employerId) {
 		        System.out.println(">>> ERROR: Job not found or access denied.");
@@ -231,6 +234,7 @@ public class JobView {
 		    List<Skill> skills = jobService.getSkillsByJobId(jobId);
 		    // NEW: Get applicant count for Stats
 		    int applicantCount = jobService.getApplicantCount(jobId);
+		    System.out.println(applicantCount);
 		
 		    System.out.println("\n------------------ JOB DETAILS ------------------");
 		    System.out.println("ID:          " + job.getJobId() + " [" + job.getStatus() + "]"); // Show Status
