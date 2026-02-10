@@ -5,14 +5,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class DBConnection {
+	
+//	logger
+	private static final Logger logger = LogManager.getLogger(DBConnection.class);
+	
 	public static Connection getConnection() {
         Connection conn = null;
         try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("db.properties")) {
             Properties prop = new Properties();
 
             if (input == null) {
-                System.out.println("Error: db.properties not found in src/main/resources");
+            	logger.error("Error: db.properties not found in src/main/resources");
                 return null;
             }
 
@@ -24,10 +31,12 @@ public class DBConnection {
             String pass = prop.getProperty("db.password");
 
             conn = DriverManager.getConnection(url, user, pass);
-            System.out.println("Connected to database successfully using secret key.");
 
+         // Log successful connection at INFO level
+            logger.info("Successfully established connection to database: {}", url);
+            
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Database connection failed: {}", e.getMessage(), e);
         }
         return conn;
     }
